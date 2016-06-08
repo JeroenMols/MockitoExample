@@ -10,6 +10,9 @@ public class User {
     private final String password;
 
     public User(WebService webService, String userName, String password) {
+        if (webService == null) {
+            throw new RuntimeException("Webservice required");
+        }
         this.webService = webService;
         this.userName = userName;
         this.password = password;

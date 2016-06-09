@@ -6,20 +6,20 @@ package com.jeroenmols.mockitoexample;
 public class User {
 
     private final WebService webService;
-    private final String userName;
+    private final int userId;
     private final String password;
 
-    public User(WebService webService, String userName, String password) {
+    public User(WebService webService, int userId, String password) {
         if (webService == null) {
             throw new RuntimeException("Webservice required");
         }
         this.webService = webService;
-        this.userName = userName;
+        this.userId = userId;
         this.password = password;
     }
 
     public void login(final LoginInterface loginInterface) {
-        webService.login(userName, password, new Response() {
+        webService.login(userId, password, new Response() {
             @Override
             public void onRequestCompleted(boolean isSuccess, String data) {
                 if (isSuccess) {
@@ -29,5 +29,9 @@ public class User {
                 }
             }
         });
+    }
+
+    public void logout() {
+        webService.logout();
     }
 }

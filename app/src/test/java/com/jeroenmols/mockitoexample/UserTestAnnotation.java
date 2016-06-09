@@ -8,7 +8,6 @@ import org.mockito.junit.MockitoRule;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 /**
@@ -16,7 +15,7 @@ import static org.mockito.Mockito.verify;
  */
 public class UserTestAnnotation {
 
-    public static final String USER_NAME = "myUserName";
+    public static final int USER_ID = 1111007;
     public static final String PASSWORD = "n1c3try";
 
     @Rule
@@ -27,15 +26,15 @@ public class UserTestAnnotation {
 
     @Test
     public void createUserWithWebService() throws Exception {
-        new User(mockWebService, null, null);
+        new User(mockWebService, 0, null);
     }
 
     @Test
     public void loginWithUserNameAndPassword() throws Exception {
-        User user = new User(mockWebService, USER_NAME, PASSWORD);
+        User user = new User(mockWebService, USER_ID, PASSWORD);
 
         user.login(null);
 
-        verify(mockWebService).login(eq(USER_NAME), eq(PASSWORD), any(Response.class));
+        verify(mockWebService).login(eq(USER_ID), eq(PASSWORD), any(Response.class));
     }
 }

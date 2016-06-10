@@ -2,6 +2,7 @@ package com.jeroenmols.mockitoexample;
 
 import org.junit.Rule;
 import org.junit.Test;
+import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
@@ -27,6 +28,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.only;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.inOrder;
 
 /**
  * @author Jeroen Mols on 08/06/16.
@@ -85,6 +87,20 @@ public class UserTest {
         // See Mockito.Matchers and Mockito.AdditionalMatchers for all matchers
         // http://site.mockito.org/mockito/docs/current/org/mockito/Matchers.html
         // http://site.mockito.org/mockito/docs/current/org/mockito/AdditionalMatchers.html
+    }
+
+    @Test
+    public void loginThenLogoutToWebService() throws Exception {
+        User user = new User(mockWebService, USER_ID, PASSWORD);
+
+        user.login(null);
+        user.logout();
+
+        InOrder inOrder = inOrder(mockWebService);
+
+        //following will make sure that add is first called with "was added first, then with "was added second"
+        inOrder.verify(mockWebService).login(anyInt(), anyString(), any(Response.class));
+        inOrder.verify(mockWebService).logout();
     }
 
     @Test

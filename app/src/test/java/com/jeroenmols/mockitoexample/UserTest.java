@@ -6,10 +6,19 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
+import static org.mockito.AdditionalMatchers.and;
+import static org.mockito.AdditionalMatchers.gt;
+import static org.mockito.AdditionalMatchers.leq;
+import static org.mockito.AdditionalMatchers.lt;
+import static org.mockito.AdditionalMatchers.not;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.contains;
 import static org.mockito.Matchers.eq;
+import static org.mockito.Matchers.isNotNull;
+import static org.mockito.Matchers.matches;
+import static org.mockito.Matchers.startsWith;
 import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.atMost;
@@ -46,7 +55,7 @@ public class UserTest {
     }
 
     @Test
-    public void logoutOfWebservice() throws Exception {
+    public void logoutOfWebService() throws Exception {
         User user = new User(mockWebService, USER_ID, PASSWORD);
 
         user.logout();
@@ -61,21 +70,26 @@ public class UserTest {
     }
 
     @Test
-    public void loginToWebservice() throws Exception {
+    public void loginToWebService() throws Exception {
         User user = new User(mockWebService, USER_ID, PASSWORD);
 
         user.login(null);
 
         verify(mockWebService).login(anyInt(), anyString(), any(Response.class));
+        verify(mockWebService).login(eq(USER_ID), eq(PASSWORD), any(Response.class));
+        verify(mockWebService).login(not(eq(0)), not(eq("12345678")), any(Response.class));
+        verify(mockWebService).login(gt(0), startsWith("n1"), any(Response.class));
+        verify(mockWebService).login(leq(USER_ID), contains("c3"), isNotNull(Response.class));
+        verify(mockWebService).login(and(gt(0), lt(Integer.MAX_VALUE)), matches("n[1-9]{1}c[1-9]{1}[a-z]{3}"), isNotNull(Response.class));
+
+        // See Mockito.Matchers and Mockito.AdditionalMatchers for all matchers
+        // http://site.mockito.org/mockito/docs/current/org/mockito/Matchers.html
+        // http://site.mockito.org/mockito/docs/current/org/mockito/AdditionalMatchers.html
     }
 
-
     @Test
-    public void loginWithUserNameAndPassword() throws Exception {
-        User user = new User(mockWebService, USER_ID, PASSWORD);
+    public void needATestToDemonstrateUseOfCollectionMatchers() throws Exception {
 
-        user.login(null);
 
-        verify(mockWebService).login(eq(USER_ID), eq(PASSWORD), any(Response.class));
     }
 }

@@ -106,7 +106,6 @@ public class UserTest {
         user.logout();
 
         InOrder inOrder = inOrder(mockWebService);
-
         //following will make sure that add is first called with "was added first, then with "was added second"
         inOrder.verify(mockWebService).login(anyInt(), anyString(), any(Response.class));
         inOrder.verify(mockWebService).logout();
@@ -148,19 +147,9 @@ public class UserTest {
         user.login(mockLoginInterface);
         verify(mockWebService).login(anyInt(), anyString(), responseArgumentCaptor.capture());
         Response response = responseArgumentCaptor.getValue();
-        
+
         response.onRequestCompleted(true, null);
 
         verify(mockLoginInterface).onLoginSuccess();
-    }
-
-    @Test
-    public void needATestToDemonstrateUseOfCollectionMatchers() throws Exception {
-
-
-    }
-
-    public void login() {
-        // implementation
     }
 }

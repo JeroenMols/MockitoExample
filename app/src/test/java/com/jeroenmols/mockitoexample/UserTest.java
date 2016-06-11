@@ -54,19 +54,19 @@ public class UserTest {
     private ArgumentCaptor<Response> responseArgumentCaptor;
 
     @Test
-    public void createUserWithoutAnnotation() throws Exception {
+    public void createMock() throws Exception {
         WebService mockWebService = mock(WebService.class);
 
         new User(mockWebService, 0, null);
     }
 
     @Test
-    public void createUser() throws Exception {
+    public void createMockUsingAnnotation() throws Exception {
         new User(mockWebService, 0, null);
     }
 
     @Test
-    public void logoutOfWebService() throws Exception {
+    public void verifyInteractionTimes() throws Exception {
         User user = new User(mockWebService, USER_ID, PASSWORD);
 
         user.logout();
@@ -81,7 +81,7 @@ public class UserTest {
     }
 
     @Test
-    public void loginToWebService() throws Exception {
+    public void verifyInteractionParameters() throws Exception {
         User user = new User(mockWebService, USER_ID, PASSWORD);
 
         user.login(null);
@@ -99,7 +99,7 @@ public class UserTest {
     }
 
     @Test
-    public void loginThenLogoutToWebService() throws Exception {
+    public void verifyInteractionOrder() throws Exception {
         User user = new User(mockWebService, USER_ID, PASSWORD);
 
         user.login(null);
@@ -113,7 +113,7 @@ public class UserTest {
     }
 
     @Test
-    public void isUserLoggedIn() throws Exception {
+    public void stubMethod() throws Exception {
         User user = new User(mockWebService, USER_ID, PASSWORD);
         when(mockWebService.isNetworkOffline()).thenReturn(true);
 
@@ -123,7 +123,7 @@ public class UserTest {
     }
 
     @Test
-    public void isUserLoggedIn2() throws Exception {
+    public void stubMethodMultiple() throws Exception {
         User user = new User(mockWebService, USER_ID, PASSWORD);
         when(mockWebService.isNetworkOffline()).thenReturn(true, false, true);
 
@@ -135,7 +135,7 @@ public class UserTest {
     }
 
     @Test(expected = CustomException.class)
-    public void isUserLoggedIn3() throws Exception {
+    public void stubMethodException() throws Exception {
         User user = new User(mockWebService, USER_ID, PASSWORD);
         when(mockWebService.isNetworkOffline()).thenThrow(CustomException.class);
 
@@ -143,7 +143,7 @@ public class UserTest {
     }
 
     @Test
-    public void loginResultToCallback() throws Exception {
+    public void captureArguments() throws Exception {
         User user = new User(mockWebService, USER_ID, PASSWORD);
         user.login(mockLoginInterface);
         verify(mockWebService).login(anyInt(), anyString(), responseArgumentCaptor.capture());

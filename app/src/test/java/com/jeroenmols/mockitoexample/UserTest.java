@@ -23,12 +23,14 @@ import static org.mockito.Matchers.startsWith;
 import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.atMost;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.only;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.when;
 
 /**
  * @author Jeroen Mols on 08/06/16.
@@ -101,6 +103,36 @@ public class UserTest {
         //following will make sure that add is first called with "was added first, then with "was added second"
         inOrder.verify(mockWebService).login(anyInt(), anyString(), any(Response.class));
         inOrder.verify(mockWebService).logout();
+    }
+
+    @Test
+    public void isUserLoggedIn() throws Exception {
+        User user = new User(mockWebService, USER_ID, PASSWORD);
+        when(mockWebService.isNetworkOffline()).thenReturn(true);
+
+        user.login(mock(LoginInterface.class));
+
+        verify(mockWebService, never()).login(anyInt(), anyString(), any(Response.class));
+    }
+
+    @Test
+    public void isUserLoggedIn2() throws Exception {
+        User user = new User(mockWebService, USER_ID, PASSWORD);
+        when(mockWebService.isNetworkOffline()).thenReturn(true, false, true);
+
+        user.login(mock(LoginInterface.class));
+        user.login(mock(LoginInterface.class));
+        user.login(mock(LoginInterface.class));
+
+        verify(mockWebService, times(1)).login(anyInt(), anyString(), any(Response.class));
+    }
+
+    @Test(expected = CustomException.class)
+    public void isUserLoggedIn3() throws Exception {
+        User user = new User(mockWebService, USER_ID, PASSWORD);
+        when(mockWebService.isNetworkOffline()).thenThrow(CustomException.class);
+
+        user.login(mock(LoginInterface.class));
     }
 
     @Test

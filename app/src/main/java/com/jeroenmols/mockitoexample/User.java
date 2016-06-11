@@ -19,6 +19,11 @@ public class User {
     }
 
     public void login(final LoginInterface loginInterface) {
+        if (webService.isNetworkOffline()) {
+            loginInterface.onLoginFailed();
+            return;
+        }
+
         webService.login(userId, password, new Response() {
             @Override
             public void onRequestCompleted(boolean isSuccess, String data) {

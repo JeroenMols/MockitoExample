@@ -2,6 +2,8 @@ package com.jeroenmols.mockitoexample;
 
 import org.junit.Rule;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
@@ -23,7 +25,6 @@ import static org.mockito.Matchers.startsWith;
 import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.atMost;
-import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -45,6 +46,12 @@ public class UserTest {
 
     @Mock
     private WebService mockWebService;
+
+    @Mock
+    private LoginInterface mockLoginInterface;
+
+    @Captor
+    private ArgumentCaptor<Response> responseArgumentCaptor;
 
     @Test
     public void createUserWithoutAnnotation() throws Exception {
@@ -110,7 +117,7 @@ public class UserTest {
         User user = new User(mockWebService, USER_ID, PASSWORD);
         when(mockWebService.isNetworkOffline()).thenReturn(true);
 
-        user.login(mock(LoginInterface.class));
+        user.login(mockLoginInterface);
 
         verify(mockWebService, never()).login(anyInt(), anyString(), any(Response.class));
     }
@@ -120,9 +127,9 @@ public class UserTest {
         User user = new User(mockWebService, USER_ID, PASSWORD);
         when(mockWebService.isNetworkOffline()).thenReturn(true, false, true);
 
-        user.login(mock(LoginInterface.class));
-        user.login(mock(LoginInterface.class));
-        user.login(mock(LoginInterface.class));
+        user.login(mockLoginInterface);
+        user.login(mockLoginInterface);
+        user.login(mockLoginInterface);
 
         verify(mockWebService, times(1)).login(anyInt(), anyString(), any(Response.class));
     }
@@ -132,12 +139,28 @@ public class UserTest {
         User user = new User(mockWebService, USER_ID, PASSWORD);
         when(mockWebService.isNetworkOffline()).thenThrow(CustomException.class);
 
-        user.login(mock(LoginInterface.class));
+        user.login(mockLoginInterface);
+    }
+
+    @Test
+    public void loginResultToCallback() throws Exception {
+        User user = new User(mockWebService, USER_ID, PASSWORD);
+        user.login(mockLoginInterface);
+        verify(mockWebService).login(anyInt(), anyString(), responseArgumentCaptor.capture());
+        Response response = responseArgumentCaptor.getValue();
+        
+        response.onRequestCompleted(true, null);
+
+        verify(mockLoginInterface).onLoginSuccess();
     }
 
     @Test
     public void needATestToDemonstrateUseOfCollectionMatchers() throws Exception {
 
 
+    }
+
+    public void login() {
+        // implementation
     }
 }

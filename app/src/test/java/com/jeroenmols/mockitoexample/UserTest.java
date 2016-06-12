@@ -1,7 +1,5 @@
 package com.jeroenmols.mockitoexample;
 
-import android.os.Handler;
-
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -33,7 +31,6 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.only;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 /**
@@ -154,5 +151,27 @@ public class UserTest {
         response.onRequestCompleted(true, null);
 
         verify(mockLoginInterface).onLoginSuccess();
+    }
+
+    @Test
+    public void mockData() throws Exception {
+        UserData mock = mock(UserData.class);
+        when(mock.getFirstName()).thenReturn("FirstName");
+        when(mock.getLastName()).thenReturn("LastName");
+        when(mock.getUserId()).thenReturn(1111007);
+
+        when(mock.getStreet()).thenReturn("StreetName");
+        when(mock.getHouseNumber()).thenReturn(1);
+        when(mock.getCity()).thenReturn("City");
+        when(mock.getCountry()).thenReturn("Country");
+
+        // Use mock in further test
+    }
+
+    @Test
+    public void testData() throws Exception {
+        UserData userData = new TestUserData();
+
+        // use mock in further test
     }
 }

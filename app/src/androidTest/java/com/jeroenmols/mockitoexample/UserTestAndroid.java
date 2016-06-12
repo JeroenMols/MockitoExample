@@ -1,6 +1,5 @@
 package com.jeroenmols.mockitoexample;
 
-import android.os.Handler;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -37,7 +36,6 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.only;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 /**
@@ -166,14 +164,5 @@ public class UserTestAndroid {
         response.onRequestCompleted(true, null);
 
         verify(mockLoginInterface).onLoginSuccess();
-    }
-
-    @Test
-    public void name() throws Exception {
-        Handler mock = mock(Handler.class);
-        mock.post(null);
-
-        verifyNoMoreInteractions(mock);
-
     }
 }

@@ -1,9 +1,13 @@
 package com.jeroenmols.mockitoexample;
 
 import android.os.Handler;
+import android.support.test.InstrumentationRegistry;
+import android.support.test.runner.AndroidJUnit4;
 
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.InOrder;
@@ -39,7 +43,8 @@ import static org.mockito.Mockito.when;
 /**
  * @author Jeroen Mols on 08/06/16.
  */
-public class UserTest {
+@RunWith(AndroidJUnit4.class)
+public class UserTestAndroid {
 
     public static final int USER_ID = 1111007;
     public static final String PASSWORD = "n1c3try";
@@ -55,6 +60,13 @@ public class UserTest {
 
     @Captor
     private ArgumentCaptor<Response> responseArgumentCaptor;
+
+    @Before
+    public void setUp() throws Exception {
+        System.setProperty(
+                "dexmaker.dexcache",
+                InstrumentationRegistry.getTargetContext().getCacheDir().getPath());
+    }
 
     @Test
     public void createMock() throws Exception {
@@ -154,5 +166,14 @@ public class UserTest {
         response.onRequestCompleted(true, null);
 
         verify(mockLoginInterface).onLoginSuccess();
+    }
+
+    @Test
+    public void name() throws Exception {
+        Handler mock = mock(Handler.class);
+        mock.post(null);
+
+        verifyNoMoreInteractions(mock);
+
     }
 }

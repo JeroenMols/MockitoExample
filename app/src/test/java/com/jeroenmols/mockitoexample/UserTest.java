@@ -181,10 +181,10 @@ public class UserTest {
     @Test
     public void customMatchers() throws Exception {
         User user = new User(mockWebService, USER_ID, PASSWORD);
-        String testMessage = "Test message";
-        user.sendMessage(testMessage);
+        String expectedMessage = "Test message";
+        user.sendMessage(expectedMessage);
 
-        verify(mockWebService).sendMessages(eq(user), listContains(testMessage));
+        verify(mockWebService).sendMessages(eq(user), listContains(expectedMessage));
         verify(mockWebService).sendMessages(eq(user), listDoesNotContain("other message"));
         verify(mockWebService).sendMessages(eq(user), listOfSize(1));
     }

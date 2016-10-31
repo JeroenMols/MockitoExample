@@ -9,6 +9,9 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
+import static com.jeroenmols.mockitoexample.matchers.ListMatchers.listContains;
+import static com.jeroenmols.mockitoexample.matchers.ListMatchers.listDoesNotContain;
+import static com.jeroenmols.mockitoexample.matchers.ListMatchers.listOfSize;
 import static org.mockito.AdditionalMatchers.and;
 import static org.mockito.AdditionalMatchers.gt;
 import static org.mockito.AdditionalMatchers.leq;
@@ -173,5 +176,16 @@ public class UserTest {
         UserData userData = new TestUserData();
 
         // use mock in further test
+    }
+
+    @Test
+    public void customMatchers() throws Exception {
+        User user = new User(mockWebService, USER_ID, PASSWORD);
+        String testMessage = "Test message";
+        user.sendMessage(testMessage);
+
+        verify(mockWebService).sendMessages(eq(user), listContains(testMessage));
+        verify(mockWebService).sendMessages(eq(user), listDoesNotContain("other message"));
+        verify(mockWebService).sendMessages(eq(user), listOfSize(1));
     }
 }

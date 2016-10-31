@@ -1,5 +1,7 @@
 package com.jeroenmols.mockitoexample;
 
+import java.util.Arrays;
+
 /**
  * @author Jeroen Mols on 08/06/16.
  */
@@ -38,5 +40,9 @@ public class User {
 
     public void logout() {
         webService.logout();
+    }
+
+    public void sendMessage(String message) {
+        webService.sendMessages(this, Arrays.asList(message));
     }
 }

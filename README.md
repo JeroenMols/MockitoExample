@@ -15,3 +15,7 @@ slides: https://speakerdeck.com/jeroenmols/testing-made-sweet-with-a-mockito
   - TLDR: Wrap final or statics methods with a different non static/final method
 - [TestUserData](https://github.com/JeroenMols/MockitoExample/blob/master/app/src/test/java/com/jeroenmols/mockitoexample/TestUserData.java) class indicating how to provide testing data for POJO objects
   - TLDR: Override all methods with default values instead of creating a mock and stubbing them out
+- [Custom matchers](https://github.com/JeroenMols/MockitoExample/tree/master/app/src/test/java/com/jeroenmols/mockitoexample/matchers) classes indicating how to create your own custom Mockito matchers
+  - TLDR: Implement ArgumentMacher interface and provide [static methods](https://github.com/JeroenMols/MockitoExample/blob/master/app/src/test/java/com/jeroenmols/mockitoexample/matchers/ListMatchers.java) for easy access
+- [Mocking final methods](https://github.com/JeroenMols/MockitoExample/blob/master/app/src/test/resources/mockito-extensions/org.mockito.plugins.MockMaker) How to configure Mockito 2.+ to mock final methods
+  - TLDR: Recreate one file (exact content and location) and you can mock final methods in jvm tests

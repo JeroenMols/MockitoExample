@@ -22,4 +22,8 @@ public class WebService {
     public void sendMessages(User user, List<String> messages) {
         throw new RuntimeException("Not implemented");
     }
+
+    public final void getMessages(User user) {
+        throw new RuntimeException();
+    }
 }

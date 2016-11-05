@@ -43,6 +43,12 @@ public class User {
     }
 
     public void sendMessage(String message) {
+        // For demonstration purposes just fire and forget
         webService.sendMessages(this, Arrays.asList(message));
+    }
+
+    public void getMessages() {
+        // For demonstration purposes just fire and forget
+        webService.getMessages(this);
     }
 }

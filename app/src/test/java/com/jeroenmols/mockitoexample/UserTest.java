@@ -188,4 +188,15 @@ public class UserTest {
         verify(mockWebService).sendMessages(eq(user), listDoesNotContain("other message"));
         verify(mockWebService).sendMessages(eq(user), listOfSize(1));
     }
+
+    @Test
+    public void mockFinalMethod() throws Exception {
+        User user = new User(mockWebService, USER_ID, PASSWORD);
+
+        user.getMessages();
+
+        // Verification made possible by file (exact content!) in:
+        // test/java/resources/mockito-extensions/org.mockito.plugins.MockMaker
+        verify(mockWebService).getMessages(user);
+    }
 }

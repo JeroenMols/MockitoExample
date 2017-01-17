@@ -6,8 +6,10 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.InOrder;
 import org.mockito.Mock;
+import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
+import org.mockito.stubbing.Answer;
 
 import static com.jeroenmols.mockitoexample.matchers.ListMatchers.listContains;
 import static com.jeroenmols.mockitoexample.matchers.ListMatchers.listDoesNotContain;
@@ -142,6 +144,25 @@ public class UserTest {
         when(mockWebService.isNetworkOffline()).thenThrow(CustomException.class);
 
         user.login(mockLoginInterface);
+    }
+
+    @Test
+    public void stubMethodAnswer() throws Exception {
+        User user = new User(mockWebService, USER_ID, PASSWORD);
+        when(mockWebService.isNetworkOffline()).then(new Answer<Boolean>() {
+            int index = 0;
+
+            @Override
+            public Boolean answer(InvocationOnMock invocation) throws Throwable {
+                return index++ % 2 == 0;
+            }
+        });
+
+        user.login(mockLoginInterface);
+        user.login(mockLoginInterface);
+        user.login(mockLoginInterface);
+
+        verify(mockWebService, times(1)).login(anyInt(), anyString(), any(Response.class));
     }
 
     @Test

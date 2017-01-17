@@ -26,7 +26,7 @@ public class User {
             return;
         }
 
-        webService.login(userId, password, new Response() {
+        Response response = new Response() {
             @Override
             public void onRequestCompleted(boolean isSuccess, String data) {
                 if (isSuccess) {
@@ -35,7 +35,8 @@ public class User {
                     loginInterface.onLoginFailed();
                 }
             }
-        });
+        };
+        webService.login(userId, password, response);
     }
 
     public void logout() {
